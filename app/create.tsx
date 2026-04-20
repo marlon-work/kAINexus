@@ -69,19 +69,19 @@ export default function CreateAgentScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: insets.bottom + 100, paddingTop: 10, paddingHorizontal: 24 }}
       >
-        <View className="items-center mb-8 mt-4">
-          <View className="w-20 h-20 bg-indigo-500/10 rounded-full items-center justify-center border border-indigo-500/30 mb-4">
+        <View className="items-center mb-12 mt-4">
+          <View className="w-20 h-20 bg-indigo-500/10 rounded-full items-center justify-center border border-indigo-500/30 mb-6">
             <Feather name="cpu" size={32} color="#818CF8" />
           </View>
           <Text className="text-white text-3xl font-extrabold tracking-tight">Deploy Agent</Text>
-          <Text className="text-slate-400 mt-2 text-center">Configure the details for your new automated assistant.</Text>
+          <Text className="text-slate-400 mt-2 text-center px-4 leading-5">Configure the details for your new automated assistant.</Text>
         </View>
 
-        <View className="space-y-6">
+        <View className="gap-y-8">
           {/* Agent Name */}
           <View>
-            <Text className="text-slate-500 font-bold mb-2 ml-1 text-[10px] uppercase tracking-[2px]">Agent Identity</Text>
-            <View className="flex-row items-center bg-[#151B2B] rounded-2xl px-4 h-14 border border-slate-800">
+            <Text className="text-slate-500 font-bold mb-3 ml-1 text-[10px] uppercase tracking-[2px]">Agent Identity</Text>
+            <View className="flex-row items-center bg-[#151B2B] rounded-2xl px-4 h-16 border border-slate-800">
               <Feather name="cpu" size={20} color="#6366F1" />
               <TextInput 
                 placeholder="e.g. Sales Assistant Bot" 
@@ -101,7 +101,7 @@ export default function CreateAgentScreen() {
                 <TouchableOpacity 
                   key={cat}
                   onPress={() => setCategory(cat as any)}
-                  className={`mr-2 px-5 py-2.5 rounded-xl border ${category === cat ? 'bg-indigo-600 border-indigo-500' : 'bg-slate-900 border-slate-800'}`}
+                  className={`mr-3 px-6 py-3 rounded-xl border ${category === cat ? 'bg-indigo-600 border-indigo-500' : 'bg-slate-900 border-slate-800'}`}
                 >
                   <Text className={`text-xs font-bold ${category === cat ? 'text-white' : 'text-slate-400'}`}>{cat}</Text>
                 </TouchableOpacity>
@@ -120,11 +120,11 @@ export default function CreateAgentScreen() {
               ].map((core) => (
                 <TouchableOpacity 
                   key={core.name}
-                  className="flex-1 bg-slate-900/50 p-4 rounded-[24px] border border-slate-800 items-center"
+                  className="flex-1 bg-slate-900/50 p-5 rounded-[28px] border border-slate-800 items-center"
                 >
-                  <View className="w-8 h-8 rounded-full items-center justify-center mb-2" style={{ backgroundColor: `${core.color}20` }}>
+                  <View className="w-10 h-10 rounded-2xl items-center justify-center mb-3" style={{ backgroundColor: `${core.color}20` }}>
                     {/* @ts-ignore */}
-                    <Feather name={core.icon} size={14} color={core.color} />
+                    <Feather name={core.icon} size={16} color={core.color} />
                   </View>
                   <Text className="text-white text-[10px] font-black uppercase tracking-tight">{core.name}</Text>
                 </TouchableOpacity>
@@ -133,10 +133,10 @@ export default function CreateAgentScreen() {
           </View>
 
           {/* Client Details */}
-          <View className="flex-row space-x-3">
-            <View className="flex-1 mr-3">
-              <Text className="text-slate-500 font-bold mb-2 ml-1 text-[10px] uppercase tracking-[2px]">Company</Text>
-              <View className="flex-row items-center bg-[#151B2B] rounded-2xl px-4 h-14 border border-slate-800">
+          <View className="flex-row">
+            <View className="flex-1 mr-4">
+              <Text className="text-slate-500 font-bold mb-3 ml-1 text-[10px] uppercase tracking-[2px]">Company</Text>
+              <View className="flex-row items-center bg-[#151B2B] rounded-2xl px-4 h-16 border border-slate-800">
                 <Feather name="briefcase" size={18} color="#94A3B8" />
                 <TextInput 
                   placeholder="Client Name" 
@@ -149,8 +149,8 @@ export default function CreateAgentScreen() {
             </View>
 
             <View className="flex-1">
-              <Text className="text-slate-500 font-bold mb-2 ml-1 text-[10px] uppercase tracking-[2px]">Deadline</Text>
-              <View className="flex-row items-center bg-[#151B2B] rounded-2xl px-4 h-14 border border-slate-800">
+              <Text className="text-slate-500 font-bold mb-3 ml-1 text-[10px] uppercase tracking-[2px]">Deadline</Text>
+              <View className="flex-row items-center bg-[#151B2B] rounded-2xl px-4 h-16 border border-slate-800">
                 <Feather name="calendar" size={18} color="#94A3B8" />
                 <TextInput 
                   placeholder="DD/MM/YYYY" 
@@ -166,14 +166,14 @@ export default function CreateAgentScreen() {
           {/* Priority */}
           <View>
             <Text className="text-slate-500 font-bold mb-3 ml-1 text-[10px] uppercase tracking-[2px]">Deployment Priority</Text>
-            <View className="flex-row space-x-2">
+            <View className="flex-row space-x-3">
               {["Low", "Medium", "High", "Critical"].map((p) => (
                 <TouchableOpacity 
                   key={p}
                   onPress={() => setPriority(p as any)}
-                  className={`flex-1 py-3 rounded-xl border items-center ${priority === p ? 'bg-slate-800 border-indigo-500' : 'bg-slate-900 border-slate-800'}`}
+                  className={`flex-1 py-4 rounded-2xl border items-center ${priority === p ? 'bg-slate-800 border-indigo-500' : 'bg-slate-900 border-slate-800'}`}
                 >
-                  <View className={`w-1.5 h-1.5 rounded-full mb-1 ${p === 'Critical' ? 'bg-rose-500' : p === 'High' ? 'bg-amber-500' : 'bg-indigo-500'}`} />
+                  <View className={`w-2 h-2 rounded-full mb-1.5 ${p === 'Critical' ? 'bg-rose-500' : p === 'High' ? 'bg-amber-500' : 'bg-indigo-500'}`} />
                   <Text className={`text-[10px] font-bold ${priority === p ? 'text-white' : 'text-slate-500'}`}>{p}</Text>
                 </TouchableOpacity>
               ))}
@@ -182,8 +182,8 @@ export default function CreateAgentScreen() {
 
           {/* Email */}
           <View>
-            <Text className="text-slate-500 font-bold mb-2 ml-1 text-[10px] uppercase tracking-[2px]">Contact Protocol</Text>
-            <View className="flex-row items-center bg-[#151B2B] rounded-2xl px-4 h-14 border border-slate-800">
+            <Text className="text-slate-500 font-bold mb-3 ml-1 text-[10px] uppercase tracking-[2px]">Contact Protocol</Text>
+            <View className="flex-row items-center bg-[#151B2B] rounded-2xl px-4 h-16 border border-slate-800">
               <Feather name="mail" size={20} color="#94A3B8" />
               <TextInput 
                 placeholder="client@nexus.io" 
@@ -199,14 +199,14 @@ export default function CreateAgentScreen() {
 
           {/* Description */}
           <View>
-            <Text className="text-slate-500 font-bold mb-2 ml-1 text-[10px] uppercase tracking-[2px]">Project Directive</Text>
-            <View className="bg-[#151B2B] rounded-2xl p-4 border border-slate-800 h-32">
+            <Text className="text-slate-500 font-bold mb-3 ml-1 text-[10px] uppercase tracking-[2px]">Project Directive</Text>
+            <View className="bg-[#151B2B] rounded-[24px] p-5 border border-slate-800 h-40">
               <TextInput 
                 placeholder="Describe the agent's primary objective..." 
                 placeholderTextColor="#475569"
                 multiline
                 textAlignVertical="top"
-                className="flex-1 text-white font-medium"
+                className="flex-1 text-white font-medium leading-5"
                 onChangeText={setDescription} 
                 value={description}
               />
@@ -216,7 +216,7 @@ export default function CreateAgentScreen() {
       </ScrollView>
 
       {/* Sticky Bottom Actions */}
-      <View className="absolute bottom-0 w-full px-6 pt-4 pb-10 bg-[#0B0F19]/90 border-t border-slate-800/60" style={{ paddingBottom: Math.max(insets.bottom, 24) }}>
+      <View className="absolute bottom-0 w-full px-6 pt-6 pb-12 bg-[#0B0F19]/90 border-t border-slate-800/60" style={{ paddingBottom: Math.max(insets.bottom, 24) }}>
         <TouchableOpacity
           activeOpacity={0.8}
           className={`h-16 rounded-full flex-row items-center justify-center ${agentName && clientName ? 'bg-indigo-600' : 'bg-slate-800'}`}
@@ -227,7 +227,7 @@ export default function CreateAgentScreen() {
           } : {}}
         >
           <Feather name="zap" size={20} color={agentName && clientName ? "white" : "#475569"} />
-          <Text className={`font-bold text-lg ml-2 ${agentName && clientName ? 'text-white' : 'text-slate-500'}`}>
+          <Text className={`font-black text-lg ml-2 uppercase tracking-widest ${agentName && clientName ? 'text-white' : 'text-slate-500'}`}>
             Initialize Agent
           </Text>
         </TouchableOpacity>

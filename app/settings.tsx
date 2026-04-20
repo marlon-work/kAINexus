@@ -1,8 +1,9 @@
-import { View, Text, ScrollView, TouchableOpacity, StatusBar, Switch } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, StatusBar, Switch, Image } from "react-native";
 import { Stack, router } from "expo-router";
 import { useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 
 export default function SettingsScreen() {
