@@ -67,10 +67,33 @@ export default function ControlRoom() {
     }
   }, [logs]);
 
+  const [logicLoad, setLogicLoad] = useState(Math.floor(Math.random() * 15 + 10));
+
+  const runDiagnostics = () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    setLogs(prev => [...prev, { 
+      id: Math.random().toString(), 
+      timestamp: new Date().toLocaleTimeString(), 
+      message: ">> INITIALIZING DEEP NEURAL DIAGNOSTICS...", 
+      type: "system" 
+    }]);
+
+    setLogicLoad(85);
+    setTimeout(() => {
+      setLogicLoad(prev => Math.max(10, prev - 20));
+      setLogs(prev => [...prev, { 
+        id: Math.random().toString(), 
+        timestamp: new Date().toLocaleTimeString(), 
+        message: ">> SYNC_SUCCESS: ALL PATTERNS NOMINAL", 
+        type: "success" 
+      }]);
+    }, 2000);
+  };
+
   if (!agent) {
     return (
       <View className="flex-1 bg-[#0B0F19] items-center justify-center">
-        <Text className="text-white">Agent not found</Text>
+        <Text className="text-white text-xl font-bold">Agent not found</Text>
       </View>
     );
   }
@@ -95,7 +118,10 @@ export default function ControlRoom() {
           headerShadowVisible: false,
           headerRight: () => (
             <TouchableOpacity 
-              onPress={() => setIsLive(!isLive)}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                setIsLive(!isLive);
+              }}
               className={`px-3 py-1.5 rounded-full border ${isLive ? 'bg-indigo-500/10 border-indigo-500/30' : 'bg-slate-800 border-slate-700'}`}
             >
               <Text className={`text-[10px] font-black uppercase tracking-widest ${isLive ? 'text-indigo-400' : 'text-slate-400'}`}>
@@ -119,7 +145,7 @@ export default function ControlRoom() {
             <Text className="text-slate-500 text-[10px] font-bold uppercase tracking-widest flex-1">
               {agent.agentName} • TERMINAL SESSION
             </Text>
-            <Feather name="refresh-cw" size={10} color="#475569" className={isLive ? "animate-spin" : ""} />
+            {isLive && <Feather name="refresh-cw" size={10} color="#6366F1" />}
           </View>
 
           <ScrollView 
@@ -146,7 +172,7 @@ export default function ControlRoom() {
           </View>
           <View className="flex-1 bg-slate-900/50 rounded-2xl border border-slate-800/50 p-3 justify-center items-center">
             <Text className="text-slate-500 text-[8px] font-black uppercase mb-1">Logic Load</Text>
-            <Text className="text-indigo-400 text-xl font-black">{Math.floor(Math.random() * 15 + 10)}%</Text>
+            <Text className="text-indigo-400 text-xl font-black">{logicLoad}%</Text>
           </View>
           <View className="flex-1 bg-slate-900/50 rounded-2xl border border-slate-800/50 p-3 justify-center items-center">
             <Text className="text-slate-500 text-[8px] font-black uppercase mb-1">Queue Size</Text>
@@ -163,20 +189,16 @@ export default function ControlRoom() {
         <View className="flex-row space-x-3">
           <TouchableOpacity 
             className="flex-1 bg-indigo-600 rounded-2xl py-4 items-center justify-center border border-indigo-500/50"
-            onPress={() => {
-              setLogs(prev => [...prev, { 
-                id: Math.random().toString(), 
-                timestamp: new Date().toLocaleTimeString(), 
-                message: ">> MANUAL_OVERRIDE_ENABLED", 
-                type: "warning" 
-              }]);
-            }}
+            onPress={runDiagnostics}
           >
             <Text className="text-white font-black text-sm uppercase tracking-widest">Run Diagnostics</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             className="w-16 bg-slate-800 rounded-2xl items-center justify-center border border-slate-700"
-            onPress={() => router.back()}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              router.back();
+            }}
           >
             <Feather name="power" size={18} color="#94A3B8" />
           </TouchableOpacity>

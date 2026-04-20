@@ -3,6 +3,8 @@ import { Agent } from "../types/Agent";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 
+import * as Haptics from "expo-haptics";
+
 interface Props {
   agent: Agent;
   index?: number;
@@ -36,7 +38,10 @@ export default function AgentCard({ agent, index = 0 }: Props) {
         shadowRadius: 8,
         elevation: 5
       }}
-      onPress={() => router.push(`/agent/${agent.id}`)}
+      onPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        router.push(`/agent/${agent.id}`);
+      }}
     >
       <View className="flex-row justify-between items-start mb-5">
         <View className="flex-row items-center flex-1">

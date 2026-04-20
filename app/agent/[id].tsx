@@ -45,8 +45,11 @@ export default function AgentDetail() {
           headerTintColor: '#fff',
           headerShadowVisible: false,
           headerRight: () => (
-            <TouchableOpacity hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-              <Feather name="more-vertical" size={24} color="#94A3B8" />
+            <TouchableOpacity 
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              onPress={() => router.push(`/agent/${agent.id}/edit`)}
+            >
+              <Feather name="edit-3" size={22} color="#818CF8" />
             </TouchableOpacity>
           ),
         }} 

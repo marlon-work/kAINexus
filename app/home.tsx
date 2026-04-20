@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, RefreshControl, StatusBar, Image } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, RefreshControl, StatusBar, Image, TextInput } from "react-native";
 import { useContext, useState } from "react";
 import { AgentContext } from "../src/context/AgentContext";
 import AgentCard from "../src/components/AgentCard";
@@ -6,6 +6,7 @@ import { router, Stack } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Haptics from "expo-haptics";
 
 export default function HomeScreen() {
   const { agents, updateAgent } = useContext(AgentContext);
@@ -22,7 +23,12 @@ export default function HomeScreen() {
   const activeAgents = agents.filter(a => a.status === "In Progress" || a.status === "Pending").length;
   const featuredAgent = agents.find(a => a.status === "In Progress") || agents[0];
 
+  const triggerHaptic = (type: Haptics.ImpactFeedbackStyle = Haptics.ImpactFeedbackStyle.Light) => {
+    Haptics.impactAsync(type);
+  };
+
   const onRefresh = () => {
+    triggerHaptic(Haptics.ImpactFeedbackStyle.Medium);
     setRefreshing(true);
     // Simulate real updates
     setTimeout(() => {
@@ -35,6 +41,7 @@ export default function HomeScreen() {
         }
       });
       setRefreshing(false);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }, 1500);
   };
 
@@ -52,19 +59,34 @@ export default function HomeScreen() {
           style={{ paddingTop: Math.max(insets.top + 10, 50) }}
         >
           <View className="flex-row justify-between items-center mb-6 px-8">
-            <View>
+            <TouchableOpacity 
+              onPress={() => {
+                triggerHaptic();
+                router.push('/settings');
+              }}
+              className="w-10 h-10 bg-white/5 rounded-xl items-center justify-center border border-white/10"
+            >
+              <Feather name="settings" size={18} color="#94A3B8" />
+            </TouchableOpacity>
+            <View className="items-center">
               <Text className="text-slate-400 text-[10px] font-black mb-0.5 tracking-[3px] uppercase opacity-70">Nexus Ecosystem • {activeAgents} Active</Text>
-              <Text className="text-white text-4xl font-black tracking-tighter">kAI Nexus</Text>
+              <Text className="text-white text-3xl font-black tracking-tighter">kAI Nexus</Text>
             </View>
             <View className="flex-row">
               <TouchableOpacity 
-                onPress={() => setShowSearch(!showSearch)}
+                onPress={() => {
+                  triggerHaptic();
+                  setShowSearch(!showSearch);
+                }}
                 className="w-10 h-10 bg-white/5 rounded-xl items-center justify-center border border-white/10 mr-2"
               >
                 <Feather name={showSearch ? "x" : "search"} size={18} color="#818CF8" />
               </TouchableOpacity>
               <TouchableOpacity 
-                onPress={() => router.push('/notifications')}
+                onPress={() => {
+                  triggerHaptic();
+                  router.push('/notifications');
+                }}
                 className="w-10 h-10 bg-white/5 rounded-xl items-center justify-center border border-white/10"
               >
                 <View className="absolute top-2 right-2 w-2 h-2 bg-indigo-500 rounded-full z-10 border border-[#1E1B4B]" />
@@ -92,7 +114,10 @@ export default function HomeScreen() {
               <TouchableOpacity 
                 activeOpacity={0.9}
                 className="bg-indigo-600/10 rounded-[32px] overflow-hidden border border-indigo-500/20"
-                onPress={() => featuredAgent && router.push(`/agent/${featuredAgent.id}`)}
+                onPress={() => {
+                  triggerHaptic(Haptics.ImpactFeedbackStyle.Medium);
+                  featuredAgent && router.push(`/agent/${featuredAgent.id}`);
+                }}
               >
                 <LinearGradient
                   colors={['rgba(79, 70, 229, 0.2)', 'rgba(11, 15, 25, 0.6)']}
@@ -133,7 +158,13 @@ export default function HomeScreen() {
                 <Text className="text-indigo-400 text-[10px] font-black">{filteredAgents.length}</Text>
               </View>
             </View>
-            <TouchableOpacity hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+            <TouchableOpacity 
+              onPress={() => {
+                triggerHaptic();
+                router.push('/analytics');
+              }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            >
               <View className="flex-row items-center bg-slate-800/30 px-3 py-1.5 rounded-xl border border-white/5">
                 <Feather name="sliders" size={14} color="#94A3B8" />
                 <Text className="text-slate-400 text-xs font-bold ml-2">Analyze</Text>
@@ -173,7 +204,10 @@ export default function HomeScreen() {
         <TouchableOpacity
           activeOpacity={0.9}
           className="absolute self-center bottom-8 shadow-[0_20px_50px_rgba(99,102,241,0.3)] items-center justify-center bg-white"
-          onPress={() => router.push("/create")}
+          onPress={() => {
+            triggerHaptic(Haptics.ImpactFeedbackStyle.Heavy);
+            router.push("/create");
+          }}
           style={{ 
             width: 72,
             height: 72,
