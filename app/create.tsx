@@ -26,6 +26,8 @@ export default function CreateAgentScreen() {
     const images = [
       require("../assets/images/kai-christmas.png"),
       require("../assets/images/kai-conexion-exitosa.png"),
+      require("../assets/images/kai-chateando.png"),
+      require("../assets/images/kai-crm.png"),
       require("../assets/images/icon.png")
     ];
     const randomImage = images[Math.floor(Math.random() * images.length)];
@@ -105,6 +107,29 @@ export default function CreateAgentScreen() {
                 </TouchableOpacity>
               ))}
             </ScrollView>
+          </View>
+
+          {/* Neural Core selection */}
+          <View>
+            <Text className="text-slate-500 font-bold mb-3 ml-1 text-[10px] uppercase tracking-[2px]">Neural Core Specification</Text>
+            <View className="flex-row space-x-3">
+              {[
+                { name: "GPT-4x", icon: "activity", color: "#34D399" },
+                { name: "Claude 3", icon: "cloud", color: "#FBBF24" },
+                { name: "Nexus-M", icon: "zap", color: "#818CF8" }
+              ].map((core) => (
+                <TouchableOpacity 
+                  key={core.name}
+                  className="flex-1 bg-slate-900/50 p-4 rounded-[24px] border border-slate-800 items-center"
+                >
+                  <View className="w-8 h-8 rounded-full items-center justify-center mb-2" style={{ backgroundColor: `${core.color}20` }}>
+                    {/* @ts-ignore */}
+                    <Feather name={core.icon} size={14} color={core.color} />
+                  </View>
+                  <Text className="text-white text-[10px] font-black uppercase tracking-tight">{core.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
 
           {/* Client Details */}

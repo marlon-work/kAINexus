@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, StatusBar, Image } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, StatusBar, Image, Alert } from "react-native";
 import { useLocalSearchParams, Stack, router } from "expo-router";
 import { useContext } from "react";
 import { AgentContext } from "../../src/context/AgentContext";
@@ -7,10 +7,11 @@ import { Feather } from "@expo/vector-icons";
 
 export default function AgentDetail() {
   const { id } = useLocalSearchParams();
+  const agentId = Array.isArray(id) ? id[0] : id;
   const { agents, removeAgent } = useContext(AgentContext);
   const insets = useSafeAreaInsets();
 
-  const agent = agents.find((a) => a.id === id);
+  const agent = agents.find((a) => a.id === agentId);
 
   if (!agent) {
     return (
@@ -21,16 +22,34 @@ export default function AgentDetail() {
     );
   }
 
+  const handleDelete = () => {
+    Alert.alert(
+      "Decommission Agent",
+      "Are you sure you want to permanently remove this agent from the Nexus ecosystem?",
+      [
+        { text: "Cancel", style: "cancel" },
+        { 
+          text: "Decommission", 
+          style: "destructive",
+          onPress: () => {
+            removeAgent(agent.id);
+            router.replace("/home");
+          }
+        }
+      ]
+    );
+  };
+
   const getStatusConfig = () => {
     switch (agent.status) {
       case "Pending":
-        return { bg: "bg-amber-500/10", text: "text-amber-400", border: "border-amber-500/30", icon: "clock" };
+        return { bg: "bg-amber-500/10", text: "text-amber-400", color: "#FBBF24", border: "border-amber-500/30", icon: "clock" as const };
       case "In Progress":
-        return { bg: "bg-indigo-500/10", text: "text-indigo-400", border: "border-indigo-500/30", icon: "refresh-cw" };
+        return { bg: "bg-indigo-500/10", text: "text-indigo-400", color: "#818CF8", border: "border-indigo-500/30", icon: "refresh-cw" as const };
       case "Delivered":
-        return { bg: "bg-emerald-500/10", text: "text-emerald-400", border: "border-emerald-500/30", icon: "check-circle" };
+        return { bg: "bg-emerald-500/10", text: "text-emerald-400", color: "#34D399", border: "border-emerald-500/30", icon: "check-circle" as const };
       default:
-        return { bg: "bg-slate-500/10", text: "text-slate-400", border: "border-slate-500/30", icon: "circle" };
+        return { bg: "bg-slate-500/10", text: "text-slate-400", color: "#94A3B8", border: "border-slate-500/30", icon: "circle" as const };
     }
   };
   const status = getStatusConfig();
@@ -47,7 +66,7 @@ export default function AgentDetail() {
           headerRight: () => (
             <TouchableOpacity 
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              onPress={() => router.push(`/agent/${agent.id}/edit`)}
+              onPress={() => router.push(`/agent/${agentId}/edit`)}
             >
               <Feather name="edit-3" size={22} color="#818CF8" />
             </TouchableOpacity>
@@ -74,8 +93,7 @@ export default function AgentDetail() {
             {agent.agentName}
           </Text>
           <View className={`px-4 py-2 rounded-full flex-row items-center border ${status.bg} ${status.border}`}>
-            {/* @ts-ignore */}
-            <Feather name={status.icon} size={14} color={status.text.replace('text-', '')} style={{ marginRight: 6 }} />
+            <Feather name={status.icon} size={14} color={status.color} style={{ marginRight: 6 }} />
             <Text className={`font-bold tracking-widest uppercase text-xs ${status.text}`}>
               {agent.status}
             </Text>
@@ -128,11 +146,31 @@ export default function AgentDetail() {
               <View className="w-12 h-12 bg-slate-800 rounded-2xl items-center justify-center mr-4 border border-slate-700">
                 <Feather name="user" size={20} color="#94A3B8" />
               </View>
-              <View>
+              <View className="flex-1">
                 <Text className="text-white font-semibold text-lg">{agent.clientName}</Text>
                 <Text className="text-slate-400 text-sm font-medium">{agent.clientEmail || 'No email provided'}</Text>
               </View>
+              <TouchableOpacity 
+                onPress={() => router.push(`/agent/${agentId}/chat`)}
+                className="w-10 h-10 bg-indigo-500 rounded-xl items-center justify-center shadow-lg"
+              >
+                <Feather name="message-square" size={18} color="white" />
+              </TouchableOpacity>
             </View>
+          </View>
+
+          <View className="bg-[#151B2B] p-5 rounded-3xl border border-slate-800">
+            <Text className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-4">Active Modules</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row">
+              <View className="mr-3">
+                <Image source={require("../../assets/images/tools-modal-basic.png")} className="w-24 h-16 rounded-xl mb-1" resizeMode="cover" />
+                <Text className="text-indigo-400 text-[10px] font-black text-center uppercase tracking-tighter">Core Tools</Text>
+              </View>
+              <View>
+                <Image source={require("../../assets/images/tools-modal-pdf.png")} className="w-24 h-16 rounded-xl mb-1" resizeMode="cover" />
+                <Text className="text-amber-400 text-[10px] font-black text-center uppercase tracking-tighter">Doc Processor</Text>
+              </View>
+            </ScrollView>
           </View>
 
           <View className="bg-[#151B2B] p-5 rounded-3xl border border-slate-800">
@@ -170,7 +208,7 @@ export default function AgentDetail() {
             activeOpacity={0.8}
             className="bg-indigo-600 rounded-[28px] py-6 flex-row justify-center items-center shadow-2xl"
             style={{ shadowColor: '#4F46E5', shadowOffset: { width: 0, height: 12 }, shadowOpacity: 0.5, shadowRadius: 20, elevation: 15 }}
-            onPress={() => router.push(`/agent/${agent.id}/control`)}
+            onPress={() => router.push(`/agent/${agentId}/control`)}
           >
             <Feather name="terminal" size={20} color="white" />
             <Text className="text-white font-black text-xl ml-3 tracking-tight">Enter Control Room</Text>
@@ -186,13 +224,7 @@ export default function AgentDetail() {
             
             <TouchableOpacity 
               className="w-16 border border-rose-900/30 bg-rose-500/10 rounded-2xl items-center justify-center"
-              onPress={() => {
-                if (confirm('Are you sure you want to decommission this agent?')) {
-                  // @ts-ignore - added to context earlier
-                  removeAgent(agent.id);
-                  router.replace('/home');
-                }
-              }}
+              onPress={handleDelete}
             >
               <Feather name="trash-2" size={18} color="#FB7185" />
             </TouchableOpacity>

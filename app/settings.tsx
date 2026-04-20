@@ -57,6 +57,26 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ padding: 24, paddingBottom: insets.bottom + 40 }}
       >
+        {/* Profile Card Overlay */}
+        <View className="mb-8 bg-[#151B2B] rounded-[32px] overflow-hidden border border-slate-800">
+          <Image 
+            source={require("../assets/images/kai-chateando.png")} 
+            className="w-full h-40 opacity-60"
+            resizeMode="cover"
+          />
+          <LinearGradient
+            colors={['transparent', '#151B2B']}
+            className="absolute top-0 left-0 right-0 h-40"
+          />
+          <View className="px-6 pb-6 -mt-10">
+            <View className="w-20 h-20 bg-indigo-600 rounded-2xl items-center justify-center border-4 border-[#0B0F19] mb-4">
+              <Feather name="user" size={32} color="white" />
+            </View>
+            <Text className="text-white text-2xl font-black">Admin Node 01</Text>
+            <Text className="text-indigo-400 font-bold text-xs uppercase tracking-widest">Master Architect Protocol</Text>
+          </View>
+        </View>
+
         <View className="mb-8">
           <Text className="text-slate-500 font-bold text-[10px] uppercase tracking-[3px] mb-4">Interface</Text>
           <View className="bg-[#151B2B] rounded-[32px] px-6 border border-slate-800">

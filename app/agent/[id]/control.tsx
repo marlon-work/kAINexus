@@ -5,6 +5,7 @@ import { AgentContext } from "../../../src/context/AgentContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Haptics from "expo-haptics";
 
 interface LogEntry {
   id: string;
@@ -15,11 +16,12 @@ interface LogEntry {
 
 export default function ControlRoom() {
   const { id } = useLocalSearchParams();
+  const agentId = Array.isArray(id) ? id[0] : id;
   const { agents } = useContext(AgentContext);
   const insets = useSafeAreaInsets();
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const agent = agents.find((a) => a.id === id);
+  const agent = agents.find((a) => a.id === agentId);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isLive, setIsLive] = useState(true);
 

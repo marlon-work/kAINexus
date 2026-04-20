@@ -14,13 +14,13 @@ export default function AgentCard({ agent, index = 0 }: Props) {
   const getStatusConfig = () => {
     switch (agent.status) {
       case "Pending":
-        return { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-amber-400", dot: "bg-amber-400", icon: "clock" };
+        return { bg: "bg-amber-500/10", border: "border-amber-500/30", text: "text-amber-400", dot: "bg-amber-400", icon: "clock" as const };
       case "In Progress":
-        return { bg: "bg-indigo-500/10", border: "border-indigo-500/30", text: "text-indigo-400", dot: "bg-indigo-400", icon: "refresh-cw" };
+        return { bg: "bg-indigo-500/10", border: "border-indigo-500/30", text: "text-indigo-400", dot: "bg-indigo-400", icon: "refresh-cw" as const };
       case "Delivered":
-        return { bg: "bg-emerald-500/10", border: "border-emerald-500/30", text: "text-emerald-400", dot: "bg-emerald-400", icon: "check-circle" };
+        return { bg: "bg-emerald-500/10", border: "border-emerald-500/30", text: "text-emerald-400", dot: "bg-emerald-400", icon: "check-circle" as const };
       default:
-        return { bg: "bg-slate-500/10", border: "border-slate-500/30", text: "text-slate-400", dot: "bg-slate-400", icon: "circle" };
+        return { bg: "bg-slate-500/10", border: "border-slate-500/30", text: "text-slate-400", dot: "bg-slate-400", icon: "circle" as const };
     }
   };
 

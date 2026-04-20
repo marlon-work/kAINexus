@@ -10,8 +10,10 @@ const INITIAL_AGENTS: Agent[] = [
     description: "Multi-purpose security agent with advanced pattern recognition and threat assessment capabilities.",
     deliveryDate: "2025-12-25",
     status: "In Progress",
-    imageUrl: require("../../assets/images/kai-christmas.png"),
+    imageUrl: require("../../assets/images/kai-crm.png"),
     progress: 65,
+    category: "Security",
+    priority: "Critical"
   },
   {
     id: "2",
@@ -21,8 +23,10 @@ const INITIAL_AGENTS: Agent[] = [
     description: "Home automation and personal assistant specialized in energy management and aerospace navigation.",
     deliveryDate: "2025-06-15",
     status: "Delivered",
-    imageUrl: require("../../assets/images/kai-conexion-exitosa.png"),
+    imageUrl: require("../../assets/images/kai-chateando.png"),
     progress: 100,
+    category: "Technical",
+    priority: "High"
   },
   {
     id: "3",
@@ -32,8 +36,10 @@ const INITIAL_AGENTS: Agent[] = [
     description: "Deep space mission coordinator with expertise in bio-hazard monitoring and distress signal analysis.",
     deliveryDate: "2026-02-10",
     status: "Pending",
-    imageUrl: require("../../assets/images/icon.png"),
+    imageUrl: require("../../assets/images/kai-christmas.png"),
     progress: 15,
+    category: "Technical",
+    priority: "Medium"
   },
   {
     id: "4",
@@ -43,8 +49,10 @@ const INITIAL_AGENTS: Agent[] = [
     description: "Emotional intelligence specialist focused on memory synthesis and empathy simulations.",
     deliveryDate: "2025-11-19",
     status: "In Progress",
-    imageUrl: require("../../assets/images/kai-christmas.png"),
+    imageUrl: require("../../assets/images/kai-conexion-exitosa.png"),
     progress: 42,
+    category: "Creative",
+    priority: "Critical"
   }
 ];
 

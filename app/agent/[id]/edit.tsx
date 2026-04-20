@@ -8,10 +8,11 @@ import * as Haptics from "expo-haptics";
 
 export default function EditAgentScreen() {
   const { id } = useLocalSearchParams();
+  const agentId = Array.isArray(id) ? id[0] : id;
   const { agents, updateAgent } = useContext(AgentContext);
   const insets = useSafeAreaInsets();
 
-  const existingAgent = agents.find(a => a.id === id);
+  const existingAgent = agents.find(a => a.id === agentId);
 
   const [agentName, setAgentName] = useState(existingAgent?.agentName || "");
   const [clientName, setClientName] = useState(existingAgent?.clientName || "");
@@ -32,7 +33,7 @@ export default function EditAgentScreen() {
     
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     
-    updateAgent(id as string, {
+    updateAgent(agentId as string, {
       agentName,
       clientName,
       clientEmail,

@@ -182,17 +182,17 @@ export default function HomeScreen() {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#818CF8" />
             }
             ListEmptyComponent={
-              <View className="items-center justify-center py-20">
-                <View className="w-20 h-20 bg-slate-800/20 rounded-full items-center justify-center mb-5 border border-white/5">
-                  <Feather name="search" size={32} color="#334155" />
+              <View className="items-center justify-center py-10 px-10">
+                <View className="w-64 h-64 mb-8 rounded-[40px] overflow-hidden border border-slate-800">
+                  <Image source={require("../assets/images/kai-chateando.png")} className="w-full h-full opacity-70" resizeMode="cover" />
                 </View>
-                <Text className="text-white text-xl font-bold mb-2">
-                  {searchQuery ? "No results found" : "No agents found"}
+                <Text className="text-white text-2xl font-black mb-2 text-center">
+                  {searchQuery ? "No matches found" : "Neural Void Detected"}
                 </Text>
-                <Text className="text-slate-500 text-center px-6 leading-relaxed font-medium">
+                <Text className="text-slate-500 text-center leading-relaxed font-semibold">
                   {searchQuery 
-                    ? `We couldn't find anything matching "${searchQuery}"`
-                    : "You haven't deployed any agents yet. Tap the button below to initialize your first Nexus agent."
+                    ? `Our search protocol couldn't locate any node matching "${searchQuery}".`
+                    : "Your Nexus is currently empty. Initialize your first neural agent to begin ecosystem expansion."
                   }
                 </Text>
               </View>
