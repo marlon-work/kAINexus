@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Agent } from "../types/Agent";
 import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
@@ -23,6 +23,7 @@ export default function AgentCard({ agent, index = 0 }: Props) {
   };
 
   const status = getStatusConfig();
+  const progress = agent.progress || 0;
 
   return (
     <TouchableOpacity
@@ -39,8 +40,16 @@ export default function AgentCard({ agent, index = 0 }: Props) {
     >
       <View className="flex-row justify-between items-start mb-5">
         <View className="flex-row items-center flex-1">
-          <View className="w-12 h-12 bg-[#1E293B] rounded-2xl items-center justify-center mr-4 border border-slate-700/50">
-            <Feather name="cpu" size={24} color="#818CF8" />
+          <View className="w-14 h-14 bg-[#1E293B] rounded-2xl items-center justify-center mr-4 border border-slate-700/50 overflow-hidden">
+            {agent.imageUrl ? (
+              <Image 
+                source={typeof agent.imageUrl === 'string' ? { uri: agent.imageUrl } : agent.imageUrl} 
+                className="w-full h-full" 
+                resizeMode="cover"
+              />
+            ) : (
+              <Feather name="cpu" size={24} color="#818CF8" />
+            )}
           </View>
           <View className="flex-1 pr-3">
             <Text className="text-white text-lg font-bold tracking-tight" numberOfLines={1}>
@@ -55,12 +64,50 @@ export default function AgentCard({ agent, index = 0 }: Props) {
           </View>
         </View>
 
-        {/* Status Badge */}
-        <View className={`px-3 py-1.5 rounded-full flex-row items-center border ${status.bg} ${status.border}`}>
-          <View className={`w-2 h-2 rounded-full mr-1.5 ${status.dot}`} />
-          <Text className={`text-[10px] font-bold tracking-widest uppercase ${status.text}`}>
-            {agent.status}
-          </Text>
+        {/* Status & Priority Badge */}
+        <View className="items-end">
+          <View className={`px-3 py-1.5 rounded-full flex-row items-center border ${status.bg} ${status.border} mb-2`}>
+            <View className={`w-1.5 h-1.5 rounded-full mr-1.5 ${status.dot}`} />
+            <Text className={`text-[9px] font-black tracking-widest uppercase ${status.text}`}>
+              {agent.status}
+            </Text>
+          </View>
+          {agent.priority && (
+            <View className={`px-2 py-0.5 rounded-lg border ${
+              agent.priority === 'Critical' ? 'bg-rose-500/10 border-rose-500/30' : 
+              agent.priority === 'High' ? 'bg-amber-500/10 border-amber-500/30' : 
+              'bg-slate-800 border-slate-700'
+            }`}>
+              <Text className={`text-[8px] font-black uppercase tracking-tight ${
+                agent.priority === 'Critical' ? 'text-rose-400' : 
+                agent.priority === 'High' ? 'text-amber-400' : 'text-slate-500'
+              }`}>
+                {agent.priority}
+              </Text>
+            </View>
+          )}
+        </View>
+      </View>
+
+      {agent.category && (
+        <View className="flex-row mb-4">
+          <View className="bg-indigo-500/10 px-2 py-1 rounded-lg border border-indigo-500/20">
+            <Text className="text-indigo-400 text-[9px] font-black uppercase tracking-tighter">{agent.category}</Text>
+          </View>
+        </View>
+      )}
+
+      {/* Progress Bar */}
+      <View className="mb-5">
+        <View className="flex-row justify-between items-center mb-1.5">
+          <Text className="text-slate-500 text-[10px] font-bold uppercase tracking-wider">Deployment Progress</Text>
+          <Text className="text-indigo-400 text-[10px] font-bold">{progress}%</Text>
+        </View>
+        <View className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+          <View 
+            className="h-full bg-indigo-500 rounded-full" 
+            style={{ width: `${progress}%` }} 
+          />
         </View>
       </View>
 

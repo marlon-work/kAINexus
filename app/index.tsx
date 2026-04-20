@@ -1,6 +1,8 @@
-import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StatusBar } from "react-native";
 import { useState } from "react";
 import { router, Stack } from "expo-router";
+import { LinearGradient } from "expo-linear-gradient";
+import { Feather } from "@expo/vector-icons";
 
 export default function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,59 +10,85 @@ export default function AuthScreen() {
   const [password, setPassword] = useState("");
 
   const handleAuth = () => {
-    // Navigate to the main app screen and prevent returning to the login screen
-    router.replace("/home" as any);
+    router.replace("/home");
   };
 
   return (
-    <KeyboardAvoidingView 
-      className="flex-1 bg-slate-900 justify-center" 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    <View className="flex-1 bg-[#0B0F19]">
       <Stack.Screen options={{ headerShown: false }} />
+      <StatusBar barStyle="light-content" />
       
-      <View className="px-6">
-        <View className="mb-10">
-          <Text className="text-white text-4xl font-extrabold mb-2 text-center">kAI Nexus</Text>
-          <Text className="text-slate-400 text-base text-center">
-            {isLogin ? "Welcome back, agent." : "Join the Nexus."}
+      <LinearGradient
+        colors={['#1E1B4B', '#0B0F19']}
+        className="absolute top-0 left-0 right-0 h-1/2 rounded-b-[60px]"
+      />
+
+      <KeyboardAvoidingView 
+        className="flex-1 justify-center px-8" 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <View className="items-center mb-12">
+          <View className="w-20 h-20 bg-white/10 rounded-[24px] items-center justify-center mb-6 border border-white/10">
+            <Feather name="cpu" size={40} color="#818CF8" />
+          </View>
+          <Text className="text-white text-5xl font-black tracking-tighter mb-2">kAI Nexus</Text>
+          <Text className="text-slate-400 text-sm font-bold uppercase tracking-[4px] opacity-70">
+            {isLogin ? "Encrypted Entry" : "New Node Enrollment"}
           </Text>
         </View>
 
-        <TextInput
-          className="bg-slate-800 text-white rounded-xl p-4 text-base mb-4 border border-slate-700"
-          placeholder="Email address"
-          placeholderTextColor="#64748b"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
+        <View className="space-y-4">
+          <View className="bg-[#151B2B] rounded-2xl flex-row items-center px-5 h-16 border border-white/5 mb-4 shadow-xl">
+            <Feather name="mail" size={20} color="#475569" />
+            <TextInput
+              className="flex-1 text-white font-medium ml-4 h-full"
+              placeholder="Protocol Email"
+              placeholderTextColor="#475569"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
 
-        <TextInput
-          className="bg-slate-800 text-white rounded-xl p-4 text-base mb-4 border border-slate-700"
-          placeholder="Password"
-          placeholderTextColor="#64748b"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
+          <View className="bg-[#151B2B] rounded-2xl flex-row items-center px-5 h-16 border border-white/5 mb-4 shadow-xl">
+            <Feather name="lock" size={20} color="#475569" />
+            <TextInput
+              className="flex-1 text-white font-medium ml-4 h-full"
+              placeholder="Access Cipher"
+              placeholderTextColor="#475569"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </View>
+
+          <TouchableOpacity 
+            activeOpacity={0.8}
+            className="bg-indigo-600 rounded-2xl h-16 items-center justify-center mt-4 shadow-2xl" 
+            style={{ shadowColor: '#4F46E5', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.5, shadowRadius: 20, elevation: 12 }}
+            onPress={handleAuth}
+          >
+            <View className="flex-row items-center">
+              <Text className="text-white text-lg font-black tracking-widest uppercase">
+                {isLogin ? "Authenticate" : "Enroll"}
+              </Text>
+              <Feather name="arrow-right" size={20} color="white" style={{ marginLeft: 10 }} />
+            </View>
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity 
-          className="bg-indigo-500 rounded-xl p-4 items-center mt-2 shadow-lg shadow-indigo-500/30" 
-          onPress={handleAuth}
+          activeOpacity={0.7}
+          className="mt-10 items-center bg-white/5 py-3 rounded-xl border border-white/5" 
+          onPress={() => setIsLogin(!isLogin)}
         >
-          <Text className="text-white text-base font-bold tracking-wide">
-            {isLogin ? "Access Nexus" : "Register"}
+          <Text className="text-slate-400 text-xs font-black uppercase tracking-widest">
+            {isLogin ? "Initialize New Account" : "Access Existing Node"}
           </Text>
         </TouchableOpacity>
-
-        <TouchableOpacity className="mt-6 items-center p-2" onPress={() => setIsLogin(!isLogin)}>
-          <Text className="text-slate-400 text-sm">
-            {isLogin ? "Don't have an account? Sign up" : "Already have an account? Log in"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
+

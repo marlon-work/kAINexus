@@ -8,4 +8,8 @@ export interface Agent {
   description: string;
   deliveryDate: string;
   status: AgentStatus;
+  imageUrl?: any;
+  progress?: number;
+  category?: "Sales" | "Support" | "Security" | "Creative" | "Technical";
+  priority?: "Low" | "Medium" | "High" | "Critical";
 }
