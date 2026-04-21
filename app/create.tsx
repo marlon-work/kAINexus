@@ -1,7 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform, StatusBar } from "react-native";
 import { useState, useContext } from "react";
 import { AgentContext } from "../src/context/AgentContext";
-import * as Crypto from "expo-crypto";
+import { agentService } from "../src/services/agentService";
 import { router, Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
@@ -10,6 +10,7 @@ export default function CreateAgentScreen() {
   const { addAgent } = useContext(AgentContext);
   const insets = useSafeAreaInsets();
 
+  const [loading, setLoading] = useState(false);
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [agentName, setAgentName] = useState("");
@@ -19,34 +20,36 @@ export default function CreateAgentScreen() {
   const [priority, setPriority] = useState<"Low" | "Medium" | "High" | "Critical">("Medium");
 
   const handleSubmit = async () => {
-    if (!agentName || !clientName) return; // Super basic validation
+    if (!agentName || !clientName) return; 
+    
+    setLoading(true);
+    try {
+      // 1. Guardar en Supabase a través del servicio
+      const newAgent = await agentService.createAgent({
+        clientName,
+        clientEmail,
+        agentName,
+        description,
+        deliveryDate,
+        category,
+        priority,
+      });
 
-    const id = await Crypto.randomUUID();
+      // 2. Opcional: Actualizar el contexto local si quieres que aparezca instantáneamente sin recargar
+      // Nota: Aquí podrías añadir una imagen por defecto como hacías antes
+      addAgent({
+        ...newAgent,
+        clientName: newAgent.client_name, // Mapeo de vuelta si el contexto usa camelCase
+        agentName: newAgent.agent_name,
+        imageUrl: require("../assets/images/icon.png"), // Imagen por defecto
+      });
 
-    const images = [
-      require("../assets/images/kai-christmas.png"),
-      require("../assets/images/kai-conexion-exitosa.png"),
-      require("../assets/images/kai-chateando.png"),
-      require("../assets/images/kai-crm.png"),
-      require("../assets/images/icon.png")
-    ];
-    const randomImage = images[Math.floor(Math.random() * images.length)];
-
-    addAgent({
-      id,
-      clientName,
-      clientEmail,
-      agentName,
-      description,
-      deliveryDate,
-      status: "Pending",
-      imageUrl: randomImage,
-      progress: Math.floor(Math.random() * 20),
-      category,
-      priority,
-    });
-
-    router.back();
+      router.back();
+    } catch (error) {
+      alert("Error al guardar el agente: " + (error as any).message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

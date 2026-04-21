@@ -1,16 +1,46 @@
-import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StatusBar } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StatusBar, Alert, ActivityIndicator } from "react-native";
 import { useState } from "react";
 import { router, Stack } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
+import { supabase } from "../src/lib/supabase";
 
 export default function AuthScreen() {
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleAuth = () => {
-    router.replace("/home");
+  const handleAuth = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Por favor ingresa todos los datos.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      if (isLogin) {
+        // Autenticación (Login)
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        router.replace("/home");
+      } else {
+        // Inscripción (Signup)
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        if (error) throw error;
+        Alert.alert("Éxito", "¡Registro completado! Si tienes activada la confirmación por email, revisa tu buzón.");
+      }
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -70,10 +100,16 @@ export default function AuthScreen() {
             onPress={handleAuth}
           >
             <View className="flex-row items-center">
-              <Text className="text-white text-lg font-black tracking-widest uppercase">
-                {isLogin ? "Authenticate" : "Enroll"}
-              </Text>
-              <Feather name="arrow-right" size={20} color="white" style={{ marginLeft: 10 }} />
+              {loading ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <>
+                  <Text className="text-white text-lg font-black tracking-widest uppercase">
+                    {isLogin ? "Authenticate" : "Enroll"}
+                  </Text>
+                  <Feather name="arrow-right" size={20} color="white" style={{ marginLeft: 10 }} />
+                </>
+              )}
             </View>
           </TouchableOpacity>
         </View>
