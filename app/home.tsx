@@ -1,12 +1,12 @@
-import { View, Text, FlatList, TouchableOpacity, RefreshControl, StatusBar, Image, TextInput } from "react-native";
-import { useContext, useState } from "react";
-import { AgentContext } from "../src/context/AgentContext";
-import AgentCard from "../src/components/AgentCard";
-import { router, Stack } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
+import { LinearGradient } from "expo-linear-gradient";
+import { router, Stack } from "expo-router";
+import { useContext, useState } from "react";
+import { FlatList, Image, RefreshControl, StatusBar, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import AgentCard from "../src/components/AgentCard";
+import { AgentContext } from "../src/context/AgentContext";
 
 export default function HomeScreen() {
   const { agents, updateAgent } = useContext(AgentContext);
@@ -15,7 +15,7 @@ export default function HomeScreen() {
   const [showSearch, setShowSearch] = useState(false);
   const insets = useSafeAreaInsets();
 
-  const filteredAgents = agents.filter(agent => 
+  const filteredAgents = agents.filter(agent =>
     agent.agentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     agent.clientName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -59,7 +59,7 @@ export default function HomeScreen() {
           style={{ paddingTop: Math.max(insets.top + 10, 50) }}
         >
           <View className="flex-row justify-between items-center mb-6 px-8">
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => {
                 triggerHaptic();
                 router.push('/settings');
@@ -73,7 +73,7 @@ export default function HomeScreen() {
               <Text className="text-white text-3xl font-black tracking-tighter">kAI Nexus</Text>
             </View>
             <View className="flex-row">
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={() => {
                   triggerHaptic();
                   setShowSearch(!showSearch);
@@ -82,7 +82,7 @@ export default function HomeScreen() {
               >
                 <Feather name={showSearch ? "x" : "search"} size={18} color="#818CF8" />
               </TouchableOpacity>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={() => {
                   triggerHaptic();
                   router.push('/notifications');
@@ -94,12 +94,12 @@ export default function HomeScreen() {
               </TouchableOpacity>
             </View>
           </View>
-          
+
           {showSearch ? (
             <View className="px-6 mb-4">
               <View className="bg-white/5 rounded-2xl flex-row items-center px-4 py-3 border border-white/10">
                 <Feather name="search" size={16} color="#475569" />
-                <TextInput 
+                <TextInput
                   placeholder="Search agents or clients..."
                   placeholderTextColor="#475569"
                   className="flex-1 ml-3 text-white font-medium"
@@ -111,7 +111,7 @@ export default function HomeScreen() {
             </View>
           ) : (
             <View className="px-6">
-              <TouchableOpacity 
+              <TouchableOpacity
                 activeOpacity={0.9}
                 className="bg-indigo-600/10 rounded-[32px] overflow-hidden border border-indigo-500/20"
                 onPress={() => {
@@ -125,9 +125,9 @@ export default function HomeScreen() {
                 >
                   <View className="w-16 h-16 bg-indigo-600/30 rounded-2xl items-center justify-center mr-4 border border-indigo-500/30 overflow-hidden">
                     {featuredAgent?.imageUrl ? (
-                      <Image 
-                        source={typeof featuredAgent.imageUrl === 'string' ? { uri: featuredAgent.imageUrl } : featuredAgent.imageUrl} 
-                        className="w-full h-full opacity-80" 
+                      <Image
+                        source={typeof featuredAgent.imageUrl === 'string' ? { uri: featuredAgent.imageUrl } : featuredAgent.imageUrl}
+                        className="w-full h-full opacity-80"
                         resizeMode="cover"
                       />
                     ) : (
@@ -158,7 +158,7 @@ export default function HomeScreen() {
                 <Text className="text-indigo-400 text-[10px] font-black">{filteredAgents.length}</Text>
               </View>
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={() => {
                 triggerHaptic();
                 router.push('/analytics');
@@ -190,7 +190,7 @@ export default function HomeScreen() {
                   {searchQuery ? "No matches found" : "Neural Void Detected"}
                 </Text>
                 <Text className="text-slate-500 text-center leading-relaxed font-semibold">
-                  {searchQuery 
+                  {searchQuery
                     ? `Our search protocol couldn't locate any node matching "${searchQuery}".`
                     : "Your Nexus is currently empty. Initialize your first neural agent to begin ecosystem expansion."
                   }
@@ -208,11 +208,11 @@ export default function HomeScreen() {
             triggerHaptic(Haptics.ImpactFeedbackStyle.Heavy);
             router.push("/create");
           }}
-          style={{ 
+          style={{
             width: 72,
             height: 72,
             borderRadius: 24,
-            elevation: 20 
+            elevation: 20
           }}
         >
           <Feather name="plus" size={32} color="#4F46E5" />
